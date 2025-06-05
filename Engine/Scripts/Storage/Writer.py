@@ -24,7 +24,7 @@ class Variables:
     def UpdateGameConfigSettings():
         from Engine.Scripts.Global.Constants import Paths
         ConfigTool = Config()
-        ConfigTool.LoadConfig(Paths.Project + "Game/GameConfig.bin")
+        ConfigTool.LoadConfig(Paths.Project + "Game/GameConfig.ini")
         RetrievedData      = ConfigTool.GetGameConfigData()
         GameConfig.Name    = RetrievedData["Name"]
         GameConfig.Version = RetrievedData["Version"]
@@ -34,6 +34,6 @@ class Variables:
     def UpdateSceneConfigSettings():
         from Engine.Scripts.Global.Constants import Paths
         ConfigTool = Config()
-        ConfigTool.LoadConfig(Paths.Project + "Game/SceneConfig.bin")
+        ConfigTool.LoadConfig(Paths.Project + "Game/SceneConfig.ini")
         RetrievedData          = ConfigTool.GetSceneConfigData()
         SceneConfig.Categories = None

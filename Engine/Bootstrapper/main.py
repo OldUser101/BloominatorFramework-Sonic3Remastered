@@ -54,6 +54,7 @@ class Project:
     def LoadDataFolder():
         if PCheck.CheckProjectType() == "DataFolder":
             Variables.UpdateGameConfigSettings()
+            Variables.UpdateSceneConfigSettings()
 
             Logging.PrintConsole("Bootstrapper", "Info", "Detected data folder!")
             Logging.PrintConsole("Bootstrapper", "Info", "Game configuration:")

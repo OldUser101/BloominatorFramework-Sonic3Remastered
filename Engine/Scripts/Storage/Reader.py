@@ -62,6 +62,27 @@ class Ini:
                 }
                 IS.append(InputMap)
         return IS
+    
+    def GetGameConfig(self):
+        GameConfig = self.ConfigParser["GameConfig"]
+        GameConfigMap = {
+            "Name":     GameConfig.get("Name"),
+            "Version":  GameConfig.getint("Version"),
+            "Icon":     GameConfig.get("Icon")
+        }
+        return GameConfigMap
+    
+    def GetSceneConfig(self):
+        Categories = {}
+        for s in self.ConfigParser.sections():
+            section = str(s)
+            if section.startswith("Category"):
+                Categories[section[9:]] = []
+            elif section.startswith("Scene"):
+                Category = self.ConfigParser[section].get("Category").strip('"')
+                Categories[Category].append(section[6:])
+        return Categories
+                
 
 class Config:
     def __init__(self):
@@ -70,46 +91,14 @@ class Config:
 
     def LoadConfig(self, Path: str):
         self.Path = Path
-        with open(Path, "rb") as ConfigFile:
-            self.Config = ConfigFile.read()
+        self.Config = Ini()
+        self.Config.LoadIni(Path)
 
     def GetGameConfigData(self):
-        if Binaries.GameConfig in self.Path:
-            ConfigData = self.Config.split(b"\x00")
-
-            GameCfgMap = {
-                "Name":    ConfigData[4].decode("utf-8")[1:-1],
-                "Version": int(ConfigData[5].decode("utf-8")[1:]),
-                "Icon":    ConfigData[7][11:-1].decode("utf_8")
-            }
-
-            return GameCfgMap
-        else:
-            print("Can't get game config data if there isn't a game config file!!!!!")
-            return None
+        return self.Config.GetGameConfig()
 
     def GetSceneConfigData(self):
-        if Binaries.SceneConfig in self.Path:
-            ConfigData = self.Config.split(b"\x00")
-
-            def GetCategoriesAndScenes():
-                Category = None
-                Categories = {}
-
-                for Line in ConfigData[3:]:
-                    if Line.startswith(b"\x14\x14 "):
-                        Category             = Line[10:]
-                        Categories[Category] = []
-                    if Line.startswith(b"\x14 ") and Category is not None:
-                        Categories[Category].append(Line[2:])
-
-                return Categories
-
-            SceneConfigMap = { GetCategoriesAndScenes() }
-            return SceneConfigMap
-        else:
-            print("Can't get scene config data if there isn't a scene config file!!!!!")
-            return None
+        return self.Config.GetSceneConfig()
 
 class Scene:
     def __init__(self):
