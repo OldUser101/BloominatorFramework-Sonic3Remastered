@@ -49,12 +49,12 @@ def CreateWindow():
     global Window
     Logging.PrintConsole("Window Manager", "Task", f"Creating a window...")
 
-    SDL_Init(c_uint(SDL_INIT_VIDEO))
+    SDL_Init(SDL_INIT_VIDEO)
 
     Window = SDL_CreateWindow(
         c_char_p(bytes(GameConfig.Name + (" (Data Folder)" if OsLib.path.isdir(Paths.Project) and ShowDFText else ""), "utf-8")),
         c_int(VideoSettings.WinWidth), c_int(VideoSettings.WinHeight),
-        c_ulong(0)
+        0
     )
 
     WindowIconPath = bytes(Paths.BloominatorPath + GameConfig.Icon, "utf-8")
@@ -98,8 +98,8 @@ def CreateRenderer():
 
     SDL_SetRenderLogicalPresentation(Renderer,
                                      w=c_int(VideoSettings.ViewportWidth), h=c_int(VideoSettings.WinHeight // (VideoSettings.WinWidth // VideoSettings.ViewportWidth)),
-                                     mode=c_int(SDL_LOGICAL_PRESENTATION_INTEGER_SCALE))
-    SDL_SetRenderDrawBlendMode(Renderer, c_uint(SDL_BLENDMODE_BLEND))
+                                     mode=SDL_LOGICAL_PRESENTATION_INTEGER_SCALE)
+    SDL_SetRenderDrawBlendMode(Renderer, SDL_BLENDMODE_BLEND)
 
     SDL_RenderClear(Renderer)
     SDL_RenderPresent(Renderer)
